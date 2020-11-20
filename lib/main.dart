@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_moment/widgets/TitleBar.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_moment/widgets/UserInfoCard.dart';
 
 void main() {
   // 透明状态栏
@@ -60,7 +60,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
                       }))),
         Align(
         alignment:Alignment.topCenter,
-      child:TitleBar())
+      child:UserInfoCard())
 
     ]));
   }
