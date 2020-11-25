@@ -1,16 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_moment/widgets/TitleBar.dart';
 import 'package:flutter_moment/widgets/UserInfoCard.dart';
 
 void main() {
+  runApp(MyApp());
   // 透明状态栏
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -48,35 +49,51 @@ class _SampleAppPageState extends State<SampleAppPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController controller = new ScrollController();
+    controller.addListener(() {
+      int offset = controller.offset.toInt();
+      print("滑动距离$offset");
+      if(offset <= 200){
+        childKey.currentState.setTrans(100);
+      }else if(offset > 200&&offset <= 230){
+        var alpha = 100 - (offset - 200)*100/30;
+        childKey.currentState.setTrans(alpha.toInt());
+      }else if(offset > 230&&offset <= 260){
+        var alpha =(offset - 230)*100/30;
+        childKey.currentState.setNotTrans(alpha.toInt());
+      }
+    });
     return Scaffold(
         body: Stack(children: <Widget>[
-          Align(
-              alignment:Alignment.center,
-              child: Expanded(
-                  child: ListView.builder(
-                      itemCount: widgets.length,
-                      itemBuilder: (BuildContext context, int position) {
-                        return getRow(position);
-                      }))),
-        Align(
-        alignment:Alignment.topCenter,
-      child:UserInfoCard())
-
+      Align(
+        alignment: Alignment.topCenter,
+        child: ListView.builder(
+            itemCount: widgets.length,
+            controller: controller,
+            itemBuilder: (BuildContext context, int position) {
+              return getRow(position);
+            }),
+      ),
+      Align(alignment: Alignment.topCenter, child: TitleBar(key:childKey))
     ]));
   }
 
   Widget getRow(int i) {
-    return GestureDetector(
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Text("Row $i"),
-      ),
-      onTap: () {
-        setState(() {
-          widgets.add(getRow(widgets.length));
-          print('row $i');
-        });
-      },
-    );
+    if (i == 0) {
+      return UserInfoCard();
+    } else {
+      return GestureDetector(
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Text("Row $i"),
+        ),
+        onTap: () {
+          setState(() {
+            widgets.add(getRow(widgets.length));
+            print('row $i');
+          });
+        },
+      );
+    }
   }
 }
