@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_moment/widgets/MomentItem.dart';
 import 'package:flutter_moment/widgets/TitleBar.dart';
 import 'package:flutter_moment/widgets/UserInfoCard.dart';
 
@@ -68,7 +69,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
       Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
-            itemCount: widgets.length,
+            itemCount: 15,
             controller: controller,
             itemBuilder: (BuildContext context, int position) {
               return getRow(position);
@@ -82,18 +83,7 @@ class _SampleAppPageState extends State<SampleAppPage> {
     if (i == 0) {
       return UserInfoCard();
     } else {
-      return GestureDetector(
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Text("Row $i"),
-        ),
-        onTap: () {
-          setState(() {
-            widgets.add(getRow(widgets.length));
-            print('row $i');
-          });
-        },
-      );
+      return MomentItem();
     }
   }
 }
