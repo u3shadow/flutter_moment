@@ -1,21 +1,28 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_moment/data/moment.dart';
+import 'package:flutter_moment/data/Tweet.dart';
 import 'package:flutter_moment/utils/utils.dart';
 
 class MomentItem extends StatefulWidget {
+  Tweet tweet;
+  MomentItem(this.tweet,{Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return MomentState();
+    return MomentState(tweet);
   }
 }
 
 class MomentState extends State<MomentItem> {
-  Moment moment;
+  Tweet moment;
+
+  MomentState(Tweet tweet) {
+    this.moment = tweet;
+  }
 
   @override
   void initState() {
     super.initState();
     widgets = getRow();
+    if(moment.comments != null&&moment.comments.length > 0)
     widgets1 = getComment();
   }
 
@@ -26,7 +33,9 @@ class MomentState extends State<MomentItem> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Image.asset(Utils.getImgPath("moment_list_icon_avatar_placeholder"),
+            FadeInImage.assetNetwork(
+                placeholder: Utils.getImgPath('moment_list_icon_avatar_placeholder'),
+                image: moment.sender.avatar,
                 width: 100, height: 100),
             Expanded(
                 child: Padding(
@@ -34,14 +43,14 @@ class MomentState extends State<MomentItem> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("testname",
+                        Text(moment.sender.nick,
                             style: TextStyle(
                                 fontSize: 22,
                                 color: Color.fromARGB(255, 0, 255, 255))),
                         Padding(
                             padding: EdgeInsets.only(top: 5, bottom: 5),
                             child: Text(
-                                "test content EdgeInsets.only EdgeInsets.only EdgeInsets.only EdgeInsets.only EdgeInsets.only EdgeInsets.only",
+                                moment.content == null?"":moment.content,
                                 style: TextStyle(
                                     fontSize: 22,
                                     color: Color.fromARGB(255, 0, 0, 0)))),
@@ -66,9 +75,10 @@ class MomentState extends State<MomentItem> {
 
   List<Widget> getRow() {
     List<Widget> list = [];
-    for (int i = 0; i < 5; i++) {
-      list.add(Image.asset(
-          Utils.getImgPath("moment_list_icon_avatar_placeholder"),
+    for (int i = 0; i < moment.images.length; i++) {
+      list.add(FadeInImage.assetNetwork(
+          placeholder: Utils.getImgPath('moment_list_icon_avatar_placeholder'),
+          image: moment.images[i].url,
           width: 120,
           height: 120));
     }
@@ -77,19 +87,20 @@ class MomentState extends State<MomentItem> {
 
   List<Widget> getComment() {
     List<Widget> list = [];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < moment.comments.length; i++) {
       list.add(Padding(
-        padding: EdgeInsets.only(top: 10,bottom: 10),
-          child:Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-        Text("testname:",
-            style: TextStyle(
-                fontSize: 20, color: Color.fromARGB(255, 0, 255, 255))),
-        Expanded(child:Text(
-            "这是测试消息，把拉粑粑了，换行换行，快换行",
-            style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 0, 0, 0))))
-      ])));
+          padding: EdgeInsets.only(top: 10, bottom: 10),
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(moment.comments[i].sender.nick,
+                    style: TextStyle(
+                        fontSize: 20, color: Color.fromARGB(255, 0, 255, 255))),
+                Expanded(
+                    child: Text(moment.comments[i].content,
+                        style: TextStyle(
+                            fontSize: 20, color: Color.fromARGB(255, 0, 0, 0))))
+              ])));
     }
     return list;
   }

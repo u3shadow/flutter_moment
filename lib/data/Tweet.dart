@@ -3,7 +3,7 @@
 /// sender : {"username":"jport","nick":"Joe Portman","avatar":"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRJm8UXZ0mYtjv1a48RKkFkdyd4kOWLJB0o_l7GuTS8-q8VF64w"}
 /// comments : [{"content":"Good.","sender":{"username":"outman","nick":"Super hero","avatar":"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRJm8UXZ0mYtjv1a48RKkFkdyd4kOWLJB0o_l7GuTS8-q8VF64w"}},{"content":"Like it too","sender":{"username":"inman","nick":"Doggy Over","avatar":"https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRJm8UXZ0mYtjv1a48RKkFkdyd4kOWLJB0o_l7GuTS8-q8VF64w"}}]
 
-class Moment {
+class Tweet {
   String _content;
   List<Images> _images;
   Sender _sender;
@@ -14,7 +14,7 @@ class Moment {
   Sender get sender => _sender;
   List<Comments> get comments => _comments;
 
-  Moment({
+  Tweet({
       String content, 
       List<Images> images, 
       Sender sender, 
@@ -25,7 +25,7 @@ class Moment {
     _comments = comments;
 }
 
-  Moment.fromJson(dynamic json) {
+  Tweet.fromJson(dynamic json) {
     _content = json["content"];
     if (json["images"] != null) {
       _images = [];
